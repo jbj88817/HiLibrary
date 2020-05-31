@@ -4,6 +4,10 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.List;
+
 
 public class HiLog {
     public static void v(Object... contents) {
@@ -68,9 +72,27 @@ public class HiLog {
         }
 
         StringBuilder sb = new StringBuilder();
+        if (config.includeThread()) {
+            String threadInfo = HiLogConfig.HI_THREAD_FORMATTER.format(Thread.currentThread());
+            sb.append(threadInfo).append("\n");
+        }
+
+        if (config.stackTraceDepth() > 0) {
+            String stackTrace = HiLogConfig.HI_STACK_TRACE_FORMATTER.format(new Throwable().getStackTrace());
+            sb.append(stackTrace).append("\n");
+        }
+
         String body = parseBody(contents);
         sb.append(body);
-        Log.println(type, tag, body);
+        List<HiLogPrinter> printers = config.printers() != null ? Arrays.asList(config.printers())
+                : HiLogManager.getInstance().getPrinters();
+        if (printers == null) {
+            return;
+        }
+
+        for (HiLogPrinter printer : printers) {
+            printer.print(config, type, tag, sb.toString());
+        }
     }
 
     private static String parseBody(@NonNull Object[] contents) {
