@@ -1,15 +1,21 @@
 package us.bojie.hi.library.log;
 
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.List;
 
 
 public class HiLog {
+
+    private static final String HI_LOG_PACKAGE;
+
+    static {
+        String className = HiLog.class.getName();
+        HI_LOG_PACKAGE = className.substring(0, className.lastIndexOf('.') + 1);
+    }
+
     public static void v(Object... contents) {
         log(HiLogType.V, contents);
     }
@@ -78,11 +84,12 @@ public class HiLog {
         }
 
         if (config.stackTraceDepth() > 0) {
-            String stackTrace = HiLogConfig.HI_STACK_TRACE_FORMATTER.format(new Throwable().getStackTrace());
+            String stackTrace = HiLogConfig.HI_STACK_TRACE_FORMATTER.format(HiStackTrackUtil
+                    .getCroppedRealStackTrack(new Throwable().getStackTrace(), HI_LOG_PACKAGE, config.stackTraceDepth()));
             sb.append(stackTrace).append("\n");
         }
 
-        String body = parseBody(contents);
+        String body = parseBody(contents, config);
         sb.append(body);
         List<HiLogPrinter> printers = config.printers() != null ? Arrays.asList(config.printers())
                 : HiLogManager.getInstance().getPrinters();
@@ -95,7 +102,10 @@ public class HiLog {
         }
     }
 
-    private static String parseBody(@NonNull Object[] contents) {
+    private static String parseBody(@NonNull Object[] contents, @NonNull HiLogConfig config) {
+        if (config.injectJsonParser() != null) {
+            return config.injectJsonParser().toJson(contents);
+        }
         StringBuilder sb = new StringBuilder();
         for (Object o : contents) {
             sb.append(o.toString()).append(";");

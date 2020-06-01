@@ -13,7 +13,9 @@ public class HiStackTraceFormatter implements HiLogFormatter<StackTraceElement[]
             for (int i = 0; i < stackTrace.length; i++) {
                 if (i == 0) {
                     sb.append("stackTrace: \n");
-                } else if (i != stackTrace.length - 1) {
+                }
+
+                if (i != stackTrace.length - 1) {
                     sb.append("\t├ ");
                     sb.append(stackTrace[i].toString());
                     sb.append("\n");
