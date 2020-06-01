@@ -4,21 +4,24 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import us.bojie.hi.library.app.R
-import us.bojie.hi.library.log.HiLog
-import us.bojie.hi.library.log.HiLogConfig
-import us.bojie.hi.library.log.HiLogType
+import us.bojie.hi.library.log.*
 
 class HiLogDemoActivity : AppCompatActivity() {
+    var viewPrinter: HiViewPrinter? = null;
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_hi_log_demo)
+        viewPrinter = HiViewPrinter(this);
         findViewById<View>(R.id.btn_log).setOnClickListener {
             printLog()
         }
+        viewPrinter!!.viewProvider.showFloatingView()
     }
 
     private fun printLog() {
-        HiLog.log(object :HiLogConfig() {
+        HiLogManager.getInstance().addPrinter(viewPrinter)
+        HiLog.log(object : HiLogConfig() {
             override fun includeThread(): Boolean {
                 return true
             }
