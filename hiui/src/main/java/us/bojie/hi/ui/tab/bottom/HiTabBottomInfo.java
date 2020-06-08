@@ -1,4 +1,4 @@
-package us.bojie.hi.tab.bottom;
+package us.bojie.hi.ui.tab.bottom;
 
 import android.graphics.Bitmap;
 

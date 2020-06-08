@@ -1,4 +1,4 @@
-package us.bojie.hi.tab.bottom;
+package us.bojie.hi.ui.tab.bottom;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -15,8 +15,8 @@ import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import us.bojie.hi.R;
-import us.bojie.hi.tab.common.IHiTab;
+import us.bojie.hi.ui.R;
+import us.bojie.hi.ui.tab.common.IHiTab;
 
 public class HiTabBottom extends RelativeLayout implements IHiTab<HiTabBottomInfo<?>> {
 
@@ -92,7 +92,7 @@ public class HiTabBottom extends RelativeLayout implements IHiTab<HiTabBottomInf
         ViewGroup.LayoutParams params = getLayoutParams();
         params.height = height;
         setLayoutParams(params);
-        getTabImageView().setVisibility(GONE);
+        getTabNameView().setVisibility(GONE);
     }
 
     @Override

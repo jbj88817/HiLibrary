@@ -1,4 +1,4 @@
-package us.bojie.hi.tab.common;
+package us.bojie.hi.ui.tab.common;
 
 import android.view.ViewGroup;
 

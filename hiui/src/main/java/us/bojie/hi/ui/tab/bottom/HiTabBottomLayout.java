@@ -1,4 +1,4 @@
-package us.bojie.hi.tab.bottom;
+package us.bojie.hi.ui.tab.bottom;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -7,18 +7,22 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.FrameLayout;
+import android.widget.ScrollView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import us.bojie.hi.R;
 import us.bojie.hi.library.util.HiDisplayUtil;
-import us.bojie.hi.tab.common.IHiTabLayout;
+import us.bojie.hi.library.util.HiViewUtil;
+import us.bojie.hi.ui.R;
+import us.bojie.hi.ui.tab.common.IHiTabLayout;
 
 public class HiTabBottomLayout extends FrameLayout implements IHiTabLayout<HiTabBottom, HiTabBottomInfo<?>> {
     private static final String TAG_TAB_BOTTOM = "TAG_TAB_BOTTOM";
@@ -46,12 +50,15 @@ public class HiTabBottomLayout extends FrameLayout implements IHiTabLayout<HiTab
     }
 
     @Override
-    public HiTabBottom findTab(@NonNull HiTabBottomInfo<?> data) {
+    public HiTabBottom findTab(@NonNull HiTabBottomInfo<?> info) {
         ViewGroup ll = findViewWithTag(TAG_TAB_BOTTOM);
         for (int i = 0; i < ll.getChildCount(); i++) {
             View child = ll.getChildAt(i);
             if (child instanceof HiTabBottom) {
                 HiTabBottom tab = (HiTabBottom) child;
+                if (tab.getHiTabInfo() == info) {
+                    return tab;
+                }
             }
         }
         return null;
@@ -117,6 +124,7 @@ public class HiTabBottomLayout extends FrameLayout implements IHiTabLayout<HiTab
         flParams.gravity = Gravity.BOTTOM;
         addBottomLine();
         addView(ll, flParams);
+        fixContentView();
     }
 
     public void setTabAlpha(float alpha) {
@@ -160,5 +168,24 @@ public class HiTabBottomLayout extends FrameLayout implements IHiTabLayout<HiTab
         params.gravity = Gravity.BOTTOM;
         addView(view, params);
         view.setAlpha(bottomAlpha);
+    }
+
+    private void fixContentView() {
+        if (!(getChildAt(0) instanceof ViewGroup)) {
+            return;
+        }
+
+        ViewGroup rootView = (ViewGroup) getChildAt(0);
+        ViewGroup targetView = HiViewUtil.findTypeView(rootView, RecyclerView.class);
+        if (targetView == null) {
+            targetView = HiViewUtil.findTypeView(rootView, ScrollView.class);
+        }
+        if (targetView == null) {
+            targetView = HiViewUtil.findTypeView(rootView, AbsListView.class);
+        }
+        if (targetView != null) {
+            targetView.setPadding(0, 0, 0, HiDisplayUtil.dp2px(tabBottomHeight, getResources()));
+            targetView.setClipToPadding(false);
+        }
     }
 }
