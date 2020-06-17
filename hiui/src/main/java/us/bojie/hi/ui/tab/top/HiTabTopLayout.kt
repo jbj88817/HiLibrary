@@ -2,31 +2,47 @@ package us.bojie.hi.ui.tab.top
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.ViewGroup
 import android.widget.HorizontalScrollView
 import android.widget.LinearLayout
 import us.bojie.hi.ui.tab.common.IHiTabLayout
 import java.util.*
 
-class HiTapTopLayout(context: Context?, attrs: AttributeSet?) : HorizontalScrollView(
+class HiTabTopLayout(context: Context?, attrs: AttributeSet?) : HorizontalScrollView(
     context,
-    attrs
+    attrs,
+    0,
+    0
 ), IHiTabLayout<HiTabTop, HiTabTopInfo<*>> {
 
     private val tabSelectedChangeListeners: MutableList<IHiTabLayout.OnTabSelectedListener<HiTabTopInfo<*>>> =
         ArrayList()
-    private lateinit var selectedInfo: HiTabTopInfo<*>
+    private var selectedInfo: HiTabTopInfo<*>? = null
     private lateinit var infoList: List<HiTabTopInfo<*>>
 
-    override fun findTab(data: HiTabTopInfo<*>): HiTabTop {
-        TODO("Not yet implemented")
+    init {
+        isVerticalScrollBarEnabled = false
     }
 
-    override fun addTabSelectedChangeListener(listener: IHiTabLayout.OnTabSelectedListener<HiTabTopInfo<*>>?) {
-        TODO("Not yet implemented")
+    override fun findTab(info: HiTabTopInfo<*>): HiTabTop? {
+        val ll: ViewGroup = getRootLayout(false)
+        for (i in 0 until ll.childCount) {
+            val child = ll.getChildAt(i)
+            if (child is HiTabTop) {
+                if (child.hiTabInfo === info) {
+                    return child
+                }
+            }
+        }
+        return null
+    }
+
+    override fun addTabSelectedChangeListener(listener: IHiTabLayout.OnTabSelectedListener<HiTabTopInfo<*>>) {
+        tabSelectedChangeListeners.add(listener)
     }
 
     override fun defaultSelected(defaultInfo: HiTabTopInfo<*>) {
-        TODO("Not yet implemented")
+        onSelected(defaultInfo)
     }
 
     override fun inflateInfo(infoList: MutableList<HiTabTopInfo<*>>) {
@@ -49,7 +65,17 @@ class HiTapTopLayout(context: Context?, attrs: AttributeSet?) : HorizontalScroll
             tabSelectedChangeListeners.add(tab)
             tab.hiTabInfo = info
             linearLayout.addView(tab)
+            tab.setOnClickListener {
+                onSelected(info)
+            }
         }
+    }
+
+    private fun onSelected(nextInfo: HiTabTopInfo<*>) {
+        for (listener in tabSelectedChangeListeners) {
+            listener.onTabSelectedChange(infoList.indexOf(nextInfo), selectedInfo, nextInfo)
+        }
+        selectedInfo = nextInfo
     }
 
     private fun getRootLayout(clear: Boolean): LinearLayout {

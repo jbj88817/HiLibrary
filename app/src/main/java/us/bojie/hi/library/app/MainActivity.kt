@@ -7,6 +7,7 @@ import android.view.View
 import us.bojie.hi.library.app.databinding.ActivityMainBinding
 import us.bojie.hi.library.app.demo.HiLogDemoActivity
 import us.bojie.hi.library.app.demo.tab.HiTabBottomDemoActivity
+import us.bojie.hi.library.app.demo.tab.HiTabTopDemoActivity
 import us.bojie.hi.ui.tab.bottom.HiTabBottomInfo
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
@@ -25,6 +26,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             }
             R.id.tv_tab_bottom -> {
                 startActivity(Intent(this, HiTabBottomDemoActivity::class.java))
+            }
+            R.id.tv_tab_top -> {
+                startActivity(Intent(this, HiTabTopDemoActivity::class.java))
             }
         }
     }
