@@ -97,6 +97,8 @@ public class HiTabBottom extends RelativeLayout implements IHiTab<HiTabBottomInf
 
     @Override
     public void onTabSelectedChange(int index, @Nullable HiTabBottomInfo<?> prevInfo, @NonNull HiTabBottomInfo<?> nextInfo) {
+        // prevInfo != tabInfo && nextInfo != tabInfo 跟这个组件无关
+        // prevInfo == nextInfo 这个是重复点击，不需要做改变
         if (prevInfo != tabInfo && nextInfo != tabInfo || prevInfo == nextInfo) {
             return;
         }

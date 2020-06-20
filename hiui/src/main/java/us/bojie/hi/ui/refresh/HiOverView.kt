@@ -47,7 +47,7 @@ abstract class HiOverView(
     /**
      * 触发下拉刷新 需要的最小高度
      */
-    var mPullRefreshHeight = 0
+    val mPullRefreshHeight = HiDisplayUtil.dp2px(66f, resources)
 
     /**
      * 最小阻尼
@@ -60,7 +60,6 @@ abstract class HiOverView(
     var maxDamp = 2.2f
 
     init {
-        mPullRefreshHeight = HiDisplayUtil.dp2px(66f, resources)
         init()
     }
 
