@@ -20,6 +20,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".demo.tab.HiTabBottomDemoActivity" />
+        <activity android:name=".demo.refresh.HiRefreshDemoActivity" />
     </application>
 
 </manifest>
