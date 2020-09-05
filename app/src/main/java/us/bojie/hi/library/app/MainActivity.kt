@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import us.bojie.hi.library.app.databinding.ActivityMainBinding
 import us.bojie.hi.library.app.demo.HiLogDemoActivity
+import us.bojie.hi.library.app.demo.banner.HiBannerDemoActivity
 import us.bojie.hi.library.app.demo.refresh.HiRefreshDemoActivity
 import us.bojie.hi.library.app.demo.tab.HiTabBottomDemoActivity
 import us.bojie.hi.library.app.demo.tab.HiTabTopDemoActivity
@@ -32,6 +33,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             }
             R.id.tv_refresh -> {
                 startActivity(Intent(this, HiRefreshDemoActivity::class.java))
+            }
+            R.id.tv_banner -> {
+                startActivity(Intent(this, HiBannerDemoActivity::class.java))
             }
         }
     }

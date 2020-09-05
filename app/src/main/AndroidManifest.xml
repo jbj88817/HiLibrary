@@ -21,6 +21,7 @@
         </activity>
         <activity android:name=".demo.tab.HiTabBottomDemoActivity" />
         <activity android:name=".demo.refresh.HiRefreshDemoActivity" />
+        <activity android:name=".demo.banner.HiBannerDemoActivity" />
     </application>
 
 </manifest>
